@@ -590,15 +590,6 @@ function setChartDenganFilterisasi(aa) {
   // set xlabels dan ylabels
   // jika filteredData kosong
   if (filteredData.length <= 0) {
-    if (aa == "tahun") {
-      filteredKondisi[0] = "0"
-    }
-    if (aa == "jenisSekolah") {
-      filteredKondisi[1] = "0"
-    }
-    if (aa == "jenjangPendidikan") {
-      filteredKondisi[2] = "0"
-    }
     xlabels.push("Data Yang Anda Filter Tidak Ada!")
   }
   
