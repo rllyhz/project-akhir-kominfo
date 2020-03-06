@@ -27,6 +27,7 @@ Route::middleware('web')->group(function () {
 // Untuk front-end data Chart
 Route::get('/sekolah/getDataChart', 'SekolahController@getDataChart');
 Route::get('/penyakit/getDataChart', 'KasusPenyakitController@getDataChart');
+Route::get('/pariwisata/getDataChart', 'PariwisataController@getDataChart');
 
 // Untuk Semua user
 Route::middleware('auth', 'web')->group(function () {
@@ -40,8 +41,24 @@ Route::middleware('auth', 'web')->group(function () {
 
 // Khusus Admin
 Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function () {
+    // Pariwisata
+    Route::get('/pariwisata/dasboard','PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
+    Route::get('/pariwisata/add','PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
+    Route::get('/pariwisata/export_excell','PariwisataController@export_excell')->name('admin.par_export_excell');
+    Route::post('/pariwisata/import_excell','PariwisataController@import_excell')->name('admin.par_import_excell');
+    Route::get('/pariwisata/cetak_pdf','PariwisataController@cetak_pdf')->name('admin.par_cetak_pdf');
+    Route::resource('/pariwisata','PariwisataController')->names([
+        'edit' => 'admin.pariwisata.edit',
+            'index' => 'admin.pariwisata.index',
+            'create' => 'admin.pariwisata.create',
+            'store' => 'admin.pariwisata.store',
+            'show' => 'admin.pariwisata.show',
+            'destroy' => 'admin.pariwisata.destroy',
+            'update' => 'admin.pariwisata.update',
+    ]);
     // Dashboard admin
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
+    
 
     // Admin Manage
     Route::prefix('manage')->group(function () {

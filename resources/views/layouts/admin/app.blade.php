@@ -13,7 +13,10 @@
   <meta name="csrf_token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Data Center Semarang') }} | @yield('title', 'Dashboard')</title>
-
+  <!-- <script src="{{ asset('js/app.js') }}" ></script> -->
+  <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{asset('/vendor/datatables/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- IonIcons -->
@@ -82,15 +85,17 @@
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="{{ asset('plugins/jquery/jquery.min.js')}}"></script>
+<!-- <script src="{{ asset('plugins/jquery/jquery.min.js')}}"></script> -->
 <!-- Bootstrap -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 <!-- AdminLTE -->
 <script src="{{ asset('dist/js/adminlte.js')}}"></script>
-
+<!-- Custom scripts for all pages-->
+<script src="{{asset('js/sb-admin-2.min.js')}}"></script>
 <!-- OPTIONAL SCRIPTS -->
 <script src="{{ asset('plugins/chart.js/Chart.min.js')}}"></script>
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> --}}
+
 <script src="{{ asset('dist/js/demo.js')}}"></script>
 <script src="{{ asset('dist/js/pages/dashboard3.js')}}"></script>
 
