@@ -241,7 +241,7 @@ async function isiDataset(xlabels, tipeChart) {
       type: tipeChart,
       backgroundColor: bgColor,
       borderColor: borderColor,
-      borderWidth: 1.5
+      borderWidth: 2
     })
 
     if (Rwarna >= 250) {
