@@ -16,8 +16,8 @@ class SekolahImport implements ToModel
     {
         return new Sekolah([
             'tahun' => $row[0],
-            'kota' => $row[1],
-            'jenjang_pendidikan' => strtoupper($row[2]),
+            'kecamatan_id' => $row[1],
+            'jenjang_pendidikan_id' => strtoupper($row[2]),
             'jenis_sekolah' => ucwords($row[3]),
             'jumlah' => $row[4],
         ]);

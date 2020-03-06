@@ -112,7 +112,7 @@
                     @foreach ($penyakit as $item)
                         <tr role="row">
                             <td class="sorting_1">{{ $item['tahun'] }}</td>
-                            <td class="">{{ $item['jenis_penyakit'] }}</td>
+                            <td class="">{{ $item->penyakit }}</td>
                             <td class="">{{ $item['jumlah'] }}</td>
                             <td>
                               <a href="{{ route('admin.penyakit.edit', $item['id']) }}" class="badge badge-success">Edit</a>                              

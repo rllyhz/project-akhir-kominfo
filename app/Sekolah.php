@@ -8,6 +8,16 @@ class Sekolah extends Model
 {
     protected $table = 'sekolah';
     protected $fillable = [
-        'tahun', 'kota', 'jenjang_pendidikan', 'jenis_sekolah', 'jumlah',
+        'tahun', 'kecamatan_id', 'jenjang_pendidikan_id', 'jenis_sekolah', 'jumlah',
     ];
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
+
+    public function jenjang_pendidikan()
+    {
+        return $this->belongsTo(JenjangPendidikan::class);
+    }
 }

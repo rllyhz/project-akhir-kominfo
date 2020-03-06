@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\SekolahExport;
 use App\Imports\SekolahImport;
+use App\JenjangPendidikan;
+use App\Kecamatan;
 use Illuminate\Http\Request;
 use App\Sekolah;
 use Illuminate\Support\Facades\File;
@@ -19,6 +21,8 @@ class SekolahController extends Controller
     public function index()
     {
         $sekolah = Sekolah::all();
+        $kecamatan = Kecamatan::all();
+        $jenjang_pendidikan = JenjangPendidikan::all();
 
         $total_sekolah = 0;
         foreach ($sekolah as $item) {
@@ -28,6 +32,8 @@ class SekolahController extends Controller
         return view('admin.sekolah.index', [
             'sekolah' => $sekolah,
             'total_sekolah' => $total_sekolah,
+            'kecamatan' => $kecamatan,
+            'jenjang_pendidikan' => $jenjang_pendidikan,
         ]);
     }
 
@@ -51,8 +57,8 @@ class SekolahController extends Controller
     {
         Sekolah::create([
             'tahun' => $request->tahun,
-            'kota' => $request->kota,
-            'jenjang_pendidikan' => $request->jenjangPendidikan,
+            'kecamatan_id' => $request->kecamatan,
+            'jenjang_pendidikan_id' => $request->jenjangPendidikan,
             'jenis_sekolah' => $request->jenisSekolah,
             'jumlah' => $request->jumlahSekolah,
         ]);
@@ -83,7 +89,14 @@ class SekolahController extends Controller
     public function edit($id)
     {
         $sekolah = Sekolah::findOrFail($id);
-        return view('admin.sekolah.edit', compact('sekolah'));
+        $kecamatan = Kecamatan::all();
+        $jenjang_pendidikan = JenjangPendidikan::all();
+
+        return view('admin.sekolah.edit', [
+            'sekolah' => $sekolah,
+            'kecamatan' => $kecamatan,
+            'jenjang_pendidikan' => $jenjang_pendidikan,
+        ]);
     }
 
     /**
@@ -97,9 +110,9 @@ class SekolahController extends Controller
     {
         $sekolah = Sekolah::findOrFail($id);
 
-        $sekolah->kota = $request->kota;
+        $sekolah->kecamatan_id = $request->kecamatan;
         $sekolah->jenis_sekolah = $request->jenis_sekolah;
-        $sekolah->jenjang_pendidikan = $request->jenjang_pendidikan;
+        $sekolah->jenjang_pendidikan_id = $request->jenjang_pendidikan;
         $sekolah->tahun = $request->tahun;
         $sekolah->jumlah = $request->jumlah;
 
@@ -199,7 +212,22 @@ class SekolahController extends Controller
     // untuk chart
     public function getDataChart()
     {
-        $sekolah = Sekolah::all();
+        $sekolah = Sekolah::with(['kecamatan', 'jenjang_pendidikan'])->get();
+        $kecamatan = Kecamatan::all();
+        $jenjang_pendidikan = JenjangPendidikan::all();
+
+        $sekolahFix = [];
+
+        for ($i = 0; $i < $sekolah->count(); $i++) {
+            $sekolahFix[$i] = [
+                "id" => $sekolah[$i]->id,
+                "kecamatan" => $sekolah[$i]->kecamatan->nama_kecamatan,
+                "tahun" => $sekolah[$i]->tahun,
+                "jenjang_pendidikan" => $sekolah[$i]->jenjang_pendidikan->nama_jenjang_pendidikan,
+                "jenis_sekolah" => $sekolah[$i]->jenis_sekolah,
+                "jumlah" => $sekolah[$i]->jumlah,
+            ];
+        }
 
         $total_sekolah = 0;
         foreach ($sekolah as $item) {
@@ -207,7 +235,7 @@ class SekolahController extends Controller
         }
 
         $data = [
-            'sekolah' => $sekolah,
+            'sekolah' => $sekolahFix,
             'total_sekolah' => $total_sekolah,
         ];
 

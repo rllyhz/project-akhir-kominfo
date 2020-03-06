@@ -26,7 +26,7 @@ Route::middleware('web')->group(function () {
 
 // Untuk front-end data Chart
 Route::get('/sekolah/getDataChart', 'SekolahController@getDataChart');
-Route::get('/penyakit/getDataChart', 'PenyakitController@getDataChart');
+Route::get('/penyakit/getDataChart', 'KasusPenyakitController@getDataChart');
 
 // Untuk Semua user
 Route::middleware('auth', 'web')->group(function () {
@@ -94,7 +94,7 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
     Route::get('/sekolah/export', 'SekolahController@export')->name('admin.sekolah.export');
 
     // Admin.Penyakit
-    Route::resource('penyakit', 'PenyakitController')->names([
+    Route::resource('penyakit', 'KasusPenyakitController')->names([
         'edit' => 'admin.penyakit.edit',
         'index' => 'admin.penyakit.index',
         'create' => 'admin.penyakit.create',
@@ -103,6 +103,6 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
         'destroy' => 'admin.penyakit.destroy',
         'update' => 'admin.penyakit.update',
     ]);
-    Route::post('/penyakit/import', 'PenyakitController@import')->name('admin.penyakit.import');
-    Route::get('/penyakit/export', 'PenyakitController@export')->name('admin.penyakit.export');
+    Route::post('/penyakit/import', 'KasusPenyakitController@import')->name('admin.penyakit.import');
+    Route::get('/penyakit/export', 'KasusPenyakitController@export')->name('admin.penyakit.export');
 });

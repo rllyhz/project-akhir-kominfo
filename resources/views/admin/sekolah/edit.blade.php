@@ -26,20 +26,24 @@
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                <label for="kota">Kota</label>
-                <input type="text" class="form-control" id="kota" name="kota" required value="{{ $sekolah['kota'] }}">
+                  <label for="kecamatan" id="kecamatan">Kecamatan</label>
+                  <select name="kecamatan" id="kecamatan" class="custom-select" required>
+                    <?php foreach($kecamatan as $k) : ?>
+                      <option {{ $sekolah['kecamatan_id'] == $k['id'] ? 'selected' : '' }} value="<?= $k['id']; ?>"><?= $k['nama_kecamatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
                 <div class="form-group">
-                <label for="tahun">Tahun</label>
-                <input type="number" class="form-control" id="tahun" name="tahun" required value="{{ $sekolah['tahun'] }}">
+                  <label for="tahun">Tahun</label>
+                  <input type="number" class="form-control" id="tahun" name="tahun" required value="{{ $sekolah['tahun'] }}">
                 </div>
                 <div class="form-group">
-                <label for="jenjang_pendidikan">Jenjang Pendidikan</label>
-                <select name="jenjang_pendidikan" class="custom-select" required>
-                    <option {{ $sekolah['jenjang_pendidikan'] == "SD" ? 'selected' : '' }} value="SD">SD</option>
-                    <option {{ $sekolah['jenjang_pendidikan'] == "SMP" ? 'selected' : '' }} value="SMP">SMP</option>
-                    <option {{ $sekolah['jenjang_pendidikan'] == "SMA" ? 'selected' : '' }} value="SMA">SMA/SMK</option>
-                </select>
+                  <label for="jenjang_pendidikan">Jenjang Pendidikan</label>
+                  <select name="jenjang_pendidikan" id="jenjang_pendidikan" class="custom-select" required>
+                    <?php foreach($jenjang_pendidikan as $jp) : ?>
+                      <option {{ $sekolah['jenjang_pendidikan_id'] == $jp['id'] ? 'selected' : '' }} value="<?= $jp['id']; ?>"><?= $jp['nama_jenjang_pendidikan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
                 <div class="form-group">
                 <label for="jenis_sekolah">Jenis Sekolah</label>

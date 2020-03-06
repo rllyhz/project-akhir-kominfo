@@ -154,7 +154,7 @@
                 <thead>
                     <tr role="row">
                         <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Tahun: activate to sort column descending">Tahun</th>
-                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Kota: activate to sort column ascending">Kota</th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Kota: activate to sort column ascending">Kecamatan</th>
                         <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jenjang Pendidikan: activate to sort column ascending">Jenjang Pendidikan</th>
                         <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jenis Pendidikan: activate to sort column ascending">Jenis Sekolah</th>
                         <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Jumlah: activate to sort column ascending">Jumlah</th>
@@ -165,8 +165,8 @@
                     @foreach ($sekolah as $item)
                         <tr role="row">
                             <td class="sorting_1">{{ $item['tahun'] }}</td>
-                            <td class="">{{ $item['kota'] }}</td>
-                            <td class="">{{ $item['jenjang_pendidikan'] }}</td>
+                            <td class="">{{ $item->kecamatan->nama_kecamatan }}</td>
+                            <td class="">{{ $item->jenjang_pendidikan->nama_jenjang_pendidikan }}</td>
                             <td class="">{{ $item['jenis_sekolah'] }}</td>
                             <td class="">{{ $item['jumlah'] }}</td>
                             <td>
@@ -183,7 +183,7 @@
                 <tfoot>
                     <tr>
                         <th rowspan="1" colspan="1">Tahun</th>
-                        <th rowspan="1" colspan="1">Kota</th>
+                        <th rowspan="1" colspan="1">Kecamatan</th>
                         <th rowspan="1" colspan="1">Jenjang Pendidikan</th>
                         <th rowspan="1" colspan="1">Jenis Sekolah</th>
                         <th rowspan="1" colspan="1">Jumlah</th>
@@ -211,8 +211,13 @@
         <div class="modal-body">
             @csrf
             <div class="form-group">
-              <label for="kota">Kota</label>
-              <input type="text" class="form-control" id="kota" name="kota" required>
+              <label for="kecamatan">Kecamatan</label>
+              <select name="kecamatan" id="kecamatan" class="custom-select" required>
+                <option selected>--- pilih ---</option>
+                <?php foreach($kecamatan as $k) : ?>
+                  <option value="<?= $k['id']; ?>"><?= $k['nama_kecamatan']; ?></option>
+                <?php endforeach; ?>
+              </select>
             </div>
             <div class="form-group">
               <label for="tahun">Tahun</label>
@@ -222,9 +227,9 @@
               <label for="jenjangPendidikan">Jenjang Pendidikan</label>
               <select name="jenjangPendidikan" class="custom-select" required>
                 <option selected>--- pilih ---</option>
-                <option value="SD">SD</option>
-                <option value="SMP">SMP</option>
-                <option value="SMA">SMA/SMK</option>
+                <?php foreach($jenjang_pendidikan as $jp) : ?>
+                  <option value="<?= $jp['id']; ?>"><?= $jp['nama_jenjang_pendidikan']; ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="form-group">
@@ -367,9 +372,10 @@ async function getDataAPI() {
   sekolah = data.sekolah
 
   getTahun(sekolah)
+
   getDataPertahun(sekolah, tahun)
 
-  dataPerSekolah = ubahDataKeDataChart(dataPerTahun)
+  dataPerSekolah = ubahDataKeDataChart(dataPerTahun, true)
 }
 
 function getTahun(data) {
@@ -495,7 +501,7 @@ function tampilkanSemuaData() {
   xlabels = []
   ylabels = []
   dataPerSekolah.forEach(data => {
-    xlabels.push(data.kota)
+    xlabels.push(data.kecamatan)
     ylabels.push(data.jumlah)
   })
 
@@ -594,14 +600,15 @@ function setChartDenganFilterisasi(aa) {
   }
   
   if (filteredKondisi[0] === "1") {
+    filteredData = ubahDataKeDataChart(filteredData, false)
     filteredData.forEach(data => {
-      xlabels.push(data.kota)
+      xlabels.push(data.kecamatan)
       ylabels.push(data.jumlah)
     })
   } else {
-    filteredData = ubahDataKeDataChart(filteredData)
+    filteredData = ubahDataKeDataChart(filteredData, true)
     filteredData.forEach(data => {
-      xlabels.push(data.kota)
+      xlabels.push(data.kecamatan)
       ylabels.push(data.jumlah)
     })
   }
@@ -615,25 +622,33 @@ function setChartDenganFilterisasi(aa) {
   tampilkanChart(chartOptions)
 }
 
-function ubahDataKeDataChart(listData) {
+function ubahDataKeDataChart(listData, opsi) {
   const data = []
   const listKota = []
   const dataPerSekolah = []
-  listData.forEach(list => list.forEach(list => {
-    data.push(list)
-  }))
+  
+  if (opsi) {
+    listData.forEach(list => list.forEach(list => {
+      data.push(list)
+    }))
+  } else {
+    listData.forEach(list =>{
+      data.push(list)
+    })
+  }
+
 
   data.forEach(sekolah => {
-    if (listKota.includes(sekolah.kota)) {
-      let kotaSementara = dataPerSekolah.filter(data => data.kota == sekolah.kota)[0]
+    if (listKota.includes(sekolah.kecamatan)) {
+      let kotaSementara = dataPerSekolah.filter(data => data.kecamatan == sekolah.kecamatan)[0]
       let index = dataPerSekolah.indexOf(kotaSementara)
       dataPerSekolah[index].jumlah += parseInt(sekolah.jumlah)
     } else {
       dataPerSekolah.push({
-        kota: sekolah.kota,
+        kecamatan: sekolah.kecamatan,
         jumlah: parseInt(sekolah.jumlah)
       });
-      listKota.push(sekolah.kota)
+      listKota.push(sekolah.kecamatan)
     }
   })
 

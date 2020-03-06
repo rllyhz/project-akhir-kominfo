@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePenyakitsTable extends Migration
+class CreateKecamatanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreatePenyakitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('penyakit', function (Blueprint $table) {
+        Schema::create('kecamatan', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->year('tahun');
-            $table->string('jenis_penyakit');
-            $table->integer('jumlah');
+            $table->string("nama_kecamatan");
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreatePenyakitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penyakits');
+        Schema::dropIfExists('kecamatan');
     }
 }

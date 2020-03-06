@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PenyakitImport;
-use App\Penyakit;
+use App\KasusPenyakit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 
-class PenyakitController extends Controller
+class KasusPenyakitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class PenyakitController extends Controller
      */
     public function index()
     {
-        $penyakit = Penyakit::all();
+        $penyakit = KasusPenyakit::with('penyakit')->get();
 
         $total_penyakit = 0;
         foreach ($penyakit as $item) {
@@ -54,7 +54,7 @@ class PenyakitController extends Controller
             'jumlah' => ['required', 'integer'],
         ]);
 
-        Penyakit::create([
+        KasusPenyakit::create([
             'tahun' => $request->tahun,
             'jenis_penyakit' => $request->jenis_penyakit,
             'jumlah' => $request->jumlah
@@ -85,7 +85,7 @@ class PenyakitController extends Controller
      */
     public function edit($id)
     {
-        $penyakit = Penyakit::findOrFail($id);
+        $penyakit = KasusPenyakit::findOrFail($id);
         return view('admin.penyakit.edit', compact('penyakit'));
     }
 
@@ -104,7 +104,7 @@ class PenyakitController extends Controller
             'jenis_penyakit' => ['max:255', 'required'],
             'jumlah' => ['required', 'integer'],
         ]);
-        $penyakit = Penyakit::findOrFail($id);
+        $penyakit = KasusPenyakit::findOrFail($id);
 
         $penyakit->tahun = $request->tahun;
         $penyakit->jenis_penyakit = $request->jenis_penyakit;
@@ -131,7 +131,7 @@ class PenyakitController extends Controller
      */
     public function destroy($id)
     {
-        $penyakit = Penyakit::findOrFail($id);
+        $penyakit = KasusPenyakit::findOrFail($id);
 
         if ($penyakit->delete()) {
             return redirect()->route('admin.penyakit.index')->with('info', [
@@ -206,7 +206,23 @@ class PenyakitController extends Controller
 
     public function getDataChart()
     {
-        $penyakit = Penyakit::all();
+        $penyakit = KasusPenyakit::with('penyakit')->get();
+
+        dd($penyakit);
+
+        $penyakitFix = [];
+
+        for ($i = 0; $i < $penyakit->count(); $i++) {
+            $penyakitFix[$i] = [
+                "id" => $penyakit[$i]->id,
+                "kecamatan" => $penyakit[$i]->kecamatan->nama_kecamatan,
+                "tahun" => $penyakit[$i]->tahun,
+                "jenis_penyakit" => $penyakit[$i]->jenis_penyakit,
+                "jumlah" => $penyakit[$i]->jumlah,
+            ];
+        }
+
+        dd($penyakitFix);
 
         $total_penyakit = 0;
         foreach ($penyakit as $item) {
@@ -218,20 +234,20 @@ class PenyakitController extends Controller
         $GLOBALS['tahunSebelumnya'] = null;
         $GLOBALS['penyakitSebelumnya'] = null;
 
-        $penyakit->map(function ($penyakit) {
-            if (intval($penyakit->tahun) !== intval($GLOBALS['tahunSebelumnya'])) {
+        $penyakitFix->map(function ($penyakitFix) {
+            if (intval($penyakitFix->tahun) !== intval($GLOBALS['tahunSebelumnya'])) {
                 // echo 'ga sama <br>';
-                if (!in_array($penyakit->tahun, $GLOBALS['tahun'])) {
-                    array_push($GLOBALS['tahun'], $penyakit->tahun);
+                if (!in_array($penyakitFix->tahun, $GLOBALS['tahun'])) {
+                    array_push($GLOBALS['tahun'], $penyakitFix->tahun);
                 }
-                $GLOBALS['tahunSebelumnya'] = $penyakit->tahun;
+                $GLOBALS['tahunSebelumnya'] = $penyakitFix->tahun;
             } else {
                 // echo 'sama nih <br>';
-                $GLOBALS['tahunSebelumnya'] = $penyakit->tahun;
+                $GLOBALS['tahunSebelumnya'] = $penyakitFix->tahun;
             }
         });
 
-        $penyakit->map(function ($kasus) {
+        $penyakitFix->map(function ($kasus) {
             if ($kasus->jenis_penyakit !== $GLOBALS['penyakitSebelumnya']) {
                 // echo 'ga sama <br>';
                 if (!in_array($kasus->jenis_penyakit, $GLOBALS['jenis_penyakit'])) {
@@ -252,7 +268,7 @@ class PenyakitController extends Controller
         }
 
         foreach ($tahun as $th) {
-            foreach ($penyakit as $p) {
+            foreach ($penyakitFix as $p) {
                 if ($p->tahun == $th) {
                     array_push($dataPerTahun[$th], $p);
                 }
@@ -260,7 +276,7 @@ class PenyakitController extends Controller
         }
 
         $data = [
-            'penyakit' => $penyakit,
+            'penyakit' => $penyakitFix,
             'tahun' => $tahun,
             'nama_penyakit' => $nama_penyakit,
             'dataPerTahun' => $dataPerTahun,
