@@ -108,12 +108,7 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
     Route::post('/penyakit/import', 'KasusPenyakitController@import')->name('admin.penyakit.import');
     Route::get('/penyakit/export', 'KasusPenyakitController@export')->name('admin.penyakit.export');
 
-    // Pariwisata
-    Route::get('/pariwisata/dasboard', 'PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
-    Route::get('/pariwisata/add', 'PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
-    Route::get('/pariwisata/export_excell', 'PariwisataController@export_excell')->name('admin.par_export_excell');
-    Route::post('/pariwisata/import_excell', 'PariwisataController@import_excell')->name('admin.par_import_excell');
-    Route::get('/pariwisata/cetak_pdf', 'PariwisataController@cetak_pdf')->name('admin.par_cetak_pdf');
+    // Admin.Pariwisata
     Route::resource('/pariwisata', 'PariwisataController')->names([
         'edit' => 'admin.pariwisata.edit',
         'index' => 'admin.pariwisata.index',
@@ -123,4 +118,9 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
         'destroy' => 'admin.pariwisata.destroy',
         'update' => 'admin.pariwisata.update',
     ]);
+    Route::get('/pariwisata/dasboard', 'PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
+    Route::get('/pariwisata/add', 'PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
+    Route::get('/pariwisata/export_excell', 'PariwisataController@export_excell')->name('admin.par_export_excell');
+    Route::post('/pariwisata/import_excell', 'PariwisataController@import_excell')->name('admin.par_import_excell');
+    Route::get('/pariwisata/cetak_pdf', 'PariwisataController@cetak_pdf')->name('admin.par_cetak_pdf');
 });
