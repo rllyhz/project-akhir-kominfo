@@ -7,7 +7,14 @@
                 <div class="col-md-10">
                     <h1>Data Pengunjung Wisata Kota Semarang</h1>
                     <div class="row">
-                        <div class="col-md"><canvas id="MyChart" width="80vw" height="30vh"></canvas></div>
+                      <div class="col-sm">
+                        <div class="container">
+                          <center>
+                            <h3 id="chart-title"></h3>
+                          </center>
+                          <canvas id="myChart" width="80vw" height="30vh"></canvas>
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
@@ -126,26 +133,23 @@
 
 </script>
 @endsection
+
 @section('scripts')
 <script>  
-var myChart;
-const ctx = $('#MyChart'),
-      labelChart = 'Data Sekolah Kota Semarang Perkabupaten'
+var myChart,
+    canvas = document.getElementById('myChart'),
+    ctx = canvas.getContext('2d'),
+    labelChart = 'Data Pengunjung Wisata Kota Semarang',
+    datasets = []
 
 let xlabels = [],
     ylabels = []
 
 const chartOptions = {
-    type: 'bar',
+    type: 'line',
     data: {
         labels: [],
-        datasets: [{
-            label: labelChart,
-            data: [],
-            backgroundColor: [],
-            borderColor: [],
-            borderWidth: 1
-          }]
+        datasets: datasets,
       },
       options: {
           scales: {
@@ -164,54 +168,45 @@ const chartOptions = {
   };
 
 // persiapan data yang dibutuhkan
-let data,
+var data,
     dataPerTahun = [],
-    dataPerSekolah = [],
-    kota = [],
-    sekolah,
-    tahun = []
-
-var filteredData,
+    dataPerParawisata = [],
+    data_pariwisata,
+    tahun = [],
+    filteredData,
     filteredKondisi = ["0", "0", "0"]
-
-// resolusi chart
-ctx.css({
-  minWidth: "70vw",
-  minHeight: "30vh",
-})
 
 // tampilkan default chart
 setChart()
 
 async function setChart() {
   await getDataAPI()
-  tampilkanSemuaData()
-
-  tahun.forEach(tahun => {
-    const node = document.createElement("option");
-    node.text = tahun
-    document.getElementById("tahun").appendChild(node)
-  })
-
-  document.getElementById("cardChart").classList.add('card')
-  document.getElementById("formChart").classList.toggle("sr-only")
-  document.getElementById("chart-title").innerText = "Data Sekolah Kota Semarang"
+  isiDataset(xlabels, 'line')
+  console.log(chartOptions)
+  return false
+  hapusChart()
+  setLabel()
+  tampilkanChart()
 }
 
 async function getDataAPI() {
-  const response = await fetch('/sekolah/getDataChart')
+  const response = await fetch('/pariwisata/getDataChart')
   data = await response.json()
-  sekolah = data.sekolah
+  data_pariwisata = data
 
-  getTahun(sekolah)
-
-  getDataPertahun(sekolah, tahun)
-
-  dataPerSekolah = ubahDataKeDataChart(dataPerTahun, true)
+  getTahun(data_pariwisata)
+  getDataPertahun(data_pariwisata, tahun)
+  dataPerParawisata = ubahDataKeDataChart(dataPerTahun, true)
 }
 
 function getTahun(data) {
   tahun = data.map(data => data.tahun)
+                  .filter((value, index, self) => self.indexOf(value) === index)
+                  .sort()
+}
+
+function getLabel(data) {
+  xlabels = data.map(data => data.nama_wisata)
                   .filter((value, index, self) => self.indexOf(value) === index)
                   .sort()
 }
@@ -231,8 +226,8 @@ function filterByTahun(data ,tahun) {
 
 // fungsi utama chart
 function hapusChart() {
-  if (!ctx[0].classList.contains("sr-only")) {
-    ctx[0].classList.add("sr-only")
+  if (!canvas.classList.contains("sr-only")) {
+    canvas.classList.add("sr-only")
   }
   if (myChart) {
     myChart.destroy()
@@ -242,8 +237,8 @@ function hapusChart() {
 
 function tampilkanChart(chartOptions) {
   myChart = new Chart(ctx, chartOptions)
-  if (ctx[0].classList.contains("sr-only")) {
-    ctx[0].classList.remove("sr-only")
+  if (canvas.classList.contains("sr-only")) {
+    canvas.classList.remove("sr-only")
   }
 }
 
@@ -255,6 +250,46 @@ function isiDataChart(data = []) {
       chartOptions.data.datasets[0].data.push(data)
     })
   }
+}
+
+async function isiDataset(xlabels, tipeChart) {
+  let Rwarna = 50, Gwarna = 0, Bwarna = 90;
+  let index = 0
+
+  dataPerTahun.forEach(data => {
+    let datasetSementara = [],
+        bgColor = [],
+        borderColor = [];
+
+    data.forEach(data => {
+      datasetSementara.push(data.jumlah_wisatawan)
+    })
+
+    // set bgColor dan borderColor
+    Rwarna += Math.round((Math.random() * (250 - 10) + 10))
+    Gwarna += Math.round((Math.random() * (100 - 10) + 10))
+
+    bgColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, .3)`)
+    borderColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, 1)`)
+
+    // // set dataset
+    datasets.push({
+      label: tahun[index],
+      data: datasetSementara,
+      type: tipeChart,
+      backgroundColor: bgColor,
+      borderColor: borderColor,
+      borderWidth: 1
+    })
+
+    if (Rwarna >= 250) {
+      Rwarna = 10
+    } else if (Gwarna >= 250) {
+      Gwarna = 5
+    }
+
+    index++
+  })
 }
 
 function isiLabels(labels = []) {
@@ -271,6 +306,10 @@ function hapusIsiChart() {
 
 function hapusXLabels() {
   chartOptions.data.labels = []
+}
+
+function hapusDataset() {
+
 }
 
 function setTampilan(jumlahDataChart) {
@@ -317,24 +356,15 @@ function tampilkanSemuaData() {
   hapusXLabels()
   hapusWarnaTampilan()
 
-  chartOptions.data.datasets[0].label = 'Data Sekolah Kota Semarang Perkabupaten'
-
-  if (document.getElementById("jenisSekolah").hasAttribute("disabled")) {
-    // const atrr = document.createAttribute("disabled")
-    // document.getElementById("jenisSekolah").setAttributeNode(atrr)
-    document.getElementById("jenisSekolah").removeAttribute("disabled")
-  }
-  if (document.getElementById("jenjangPendidikan").hasAttribute("disabled")) {
-    // const atrr = document.createAttribute("disabled")
-    // document.getElementById("jenjangPendidikan").setAttributeNode(atrr)
-    document.getElementById("jenjangPendidikan").removeAttribute("disabled")
-  }
+  chartOptions.data.datasets[0].label = labelChart
 
   xlabels = []
   ylabels = []
-  dataPerSekolah.forEach(data => {
-    xlabels.push(data.kecamatan)
-    ylabels.push(data.jumlah)
+  console.log(dataPerParawisata)
+  return;
+  dataPerParawisata.forEach(data => {
+    xlabels.push(data.nama_wisata)
+    ylabels.push(data.jumlah_wisatawan)
   })
 
   isiLabels(xlabels)
@@ -434,13 +464,13 @@ function setChartDenganFilterisasi(aa) {
   if (filteredKondisi[0] === "1") {
     filteredData = ubahDataKeDataChart(filteredData, false)
     filteredData.forEach(data => {
-      xlabels.push(data.kecamatan)
+      xlabels.push(data.nama_wisata)
       ylabels.push(data.jumlah)
     })
   } else {
     filteredData = ubahDataKeDataChart(filteredData, true)
     filteredData.forEach(data => {
-      xlabels.push(data.kecamatan)
+      xlabels.push(data.nama_wisata)
       ylabels.push(data.jumlah)
     })
   }
@@ -456,8 +486,8 @@ function setChartDenganFilterisasi(aa) {
 
 function ubahDataKeDataChart(listData, opsi) {
   const data = []
-  const listKota = []
-  const dataPerSekolah = []
+  const listTempatWisata = []
+  const dataPerParawisata = []
   
   if (opsi) {
     listData.forEach(list => list.forEach(list => {
@@ -470,21 +500,21 @@ function ubahDataKeDataChart(listData, opsi) {
   }
 
 
-  data.forEach(sekolah => {
-    if (listKota.includes(sekolah.kecamatan)) {
-      let kotaSementara = dataPerSekolah.filter(data => data.kecamatan == sekolah.kecamatan)[0]
-      let index = dataPerSekolah.indexOf(kotaSementara)
-      dataPerSekolah[index].jumlah += parseInt(sekolah.jumlah)
+  data.forEach(pariwisata => {
+    if (listTempatWisata.includes(pariwisata.nama_wisata)) {
+      let tempatSementara = dataPerParawisata.filter(data => data.nama_wisata == pariwisata.nama_wisata)[0]
+      let index = dataPerParawisata.indexOf(tempatSementara)
+      dataPerParawisata[index].jumlah_wisatawan += parseInt(pariwisata.jumlah_wisatawan)
     } else {
-      dataPerSekolah.push({
-        kecamatan: sekolah.kecamatan,
-        jumlah: parseInt(sekolah.jumlah)
+      dataPerParawisata.push({
+        nama_wisata: pariwisata.nama_wisata,
+        jumlah_wisatawan: parseInt(pariwisata.jumlah_wisatawan)
       });
-      listKota.push(sekolah.kecamatan)
+      listTempatWisata.push(pariwisata.nama_wisata)
     }
   })
 
-  return dataPerSekolah;
+  return dataPerParawisata;
 }
 
 function setLabel() {
