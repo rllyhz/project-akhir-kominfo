@@ -4,7 +4,7 @@
         <div class="container ml-5">
         
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-11">
                     <h1>Data Pengunjung Wisata Kota Semarang</h1>
                     <div class="row">
                       <div class="col-sm">
@@ -16,7 +16,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row mt-4">
+                    <div class="row mt-5">
                         <div class="col-md-4">
                     <a href="{{ route('admin.par_pariwisata_add')}}" class="btn btn-primary mb-4"> <i class="fa fa-plus"></i> Tambah Data</a>
                         </div>
