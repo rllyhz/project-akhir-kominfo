@@ -11,6 +11,6 @@ class JenisPenyakit extends Model
 
     public function kasus_penyakit()
     {
-        return $this->hasMany(KasusPenyakit::class, "id");
+        return $this->hasMany(KasusPenyakit::class);
     }
 }

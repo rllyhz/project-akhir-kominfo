@@ -19,6 +19,8 @@ class KasusPenyakitController extends Controller
     {
         $penyakit = KasusPenyakit::with('penyakit')->get();
 
+        foreach ($penyakit as $p);
+
         $total_penyakit = 0;
         foreach ($penyakit as $item) {
             $total_penyakit += intval($item->jumlah);

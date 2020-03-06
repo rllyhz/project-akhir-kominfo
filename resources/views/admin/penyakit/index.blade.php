@@ -324,6 +324,5 @@ function setChart(tipeChart) {
   })
 }
 
-
 </script>
 @endsection
