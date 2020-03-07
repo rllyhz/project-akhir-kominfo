@@ -71,6 +71,30 @@
                   <p>Pariwisata</p>
               </a>
           </li>
+          <li class="nav-item">
+              <a href="{{ route('admin.dasboard_lingkunganHidup') }}" class="nav-link">
+                <i class="nav-icon fas fa-city"></i>
+                  <p>Lingkungan Hidup</p>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a href="{{ route('admin.dasboard_pekerjaanUmum') }}" class="nav-link">
+                <i class="nav-icon fas fa-city"></i>
+                  <p>Pekerjaan Umum</p>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a href="{{ route('admin.dasboard_penanggulanganBencana') }}" class="nav-link">
+                <i class="nav-icon fas fa-city"></i>
+                  <p>Penanggulangan Bencana</p>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a href="{{ route('admin.dasboard_kependudukan') }}" class="nav-link">
+                <i class="nav-icon fas fa-city"></i>
+                  <p>Kependudukan</p>
+              </a>
+          </li>
           <!-- /.nav-item -->
         </ul>
       </nav>

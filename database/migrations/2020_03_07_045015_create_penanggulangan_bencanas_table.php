@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLingkunganHidupsTable extends Migration
+class CreatePenanggulanganBencanasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateLingkunganHidupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lingkungan_hidups', function (Blueprint $table) {
+        Schema::create('penanggulangan_bencanas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('tahun');
-            $table->string('jenis_rumah','100');
-            $table->float('debit_air');
+            $table->string('tahun',0);
+            $table->string('penyebab','100');
+            $table->string('tempat_kebakaran','100');
+            $table->integer('jumlah');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateLingkunganHidupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lingkungan_hidups');
+        Schema::dropIfExists('penanggulangan_bencanas');
     }
 }

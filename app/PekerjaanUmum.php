@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LingkunganHidup extends Model
+class PekerjaanUmum extends Model
 {
     //
-    protected $guarded =["id"];
+    protected $guarded= ["id"];
 }
