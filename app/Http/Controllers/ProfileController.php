@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,14 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        echo "Halo $user->name";
+        if ($user) {
+            return view('profile.index', ['user' => $user]);
+        }
+
+        return redirect()->back()->with('info', [
+            'status' => 'warning',
+            'pesan' => 'Maaf, anda tidak diizinkan mengakses halaman ini!',
+        ]);
     }
 
     /**
@@ -27,18 +35,51 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
+
+        if ($user) {
+            return view('profile.edit', ['user' => $user]);
+        }
+
+        return redirect()->back()->with('info', [
+            'status' => 'warning',
+            'pesan' => 'Maaf, anda tidak diizinkan mengakses halaman ini!',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
-        //
-        $user = Auth::user();
+        $this->validate($request, [
+            'nama' => ['required'],
+        ]);
+
+        $userLogin = Auth::user();
+
+        if ($userLogin) {
+            $user = User::findOrFail($userLogin->id);
+            $user->name = $request->nama;
+
+            if ($user->save()) {
+                return redirect()->route('profile.index')->with('info', [
+                    'status' => 'success',
+                    'pesan' => 'Berhasil mengubah profile!',
+                ]);
+            } else {
+                return redirect()->route('profile.index')->with('info', [
+                    'status' => 'warning',
+                    'pesan' => 'Telah terjadi kegagalan saat mengubah profile.',
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('info', [
+            'status' => 'warning',
+            'pesan' => 'Maaf, anda tidak diizinkan mengakses halaman ini!',
+        ]);
     }
 }

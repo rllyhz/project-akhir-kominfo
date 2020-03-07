@@ -36,14 +36,13 @@ Route::middleware('auth', 'web')->group(function () {
     // Profile
     Route::get('/profile', 'ProfileController@index')->name('profile.index');
     Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
-    Route::get('/profile/update', 'ProfileController@update')->name('profile.update');
+    Route::post('/profile/update', 'ProfileController@update')->name('profile.update');
 });
 
 // Khusus Admin
 Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function () {
     // Dashboard admin
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
-
 
     // Admin Manage
     Route::prefix('manage')->group(function () {
