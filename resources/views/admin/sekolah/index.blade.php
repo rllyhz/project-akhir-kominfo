@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<div class="row mt-5">
+<div class="row">
   <div class="col-sm">
     <div class="container">
       <div id="cardChart">
@@ -44,7 +44,7 @@
           <div class="row mt-4">
             <div class="col-sm-4">
               <div class="form-group">
-                <button class="btn btn-success ml-5" onclick="tampilkanSemuaData()">Tampilkan Semua</button>
+                <button id="btnTampilkanSemua" class="btn btn-success ml-5 sr-only" onclick="tampilkanSemuaData()">Tampilkan Semua</button>
                 {{-- <button type="button" class="btn btn-light ml-2" onclick="hapusChart()">Hapus Chart</button> --}}
               </div>
             </div>
@@ -364,6 +364,7 @@ async function setChart() {
   document.getElementById("cardChart").classList.add('card')
   document.getElementById("formChart").classList.toggle("sr-only")
   document.getElementById("chart-title").innerText = "Data Sekolah Kota Semarang"
+  document.querySelector("#btnTampilkanSemua").classList.toggle("sr-only")
 }
 
 async function getDataAPI() {
