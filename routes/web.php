@@ -40,11 +40,12 @@ Route::middleware('auth', 'web')->group(function () {
     // Profile
     Route::get('/profile', 'ProfileController@index')->name('profile.index');
     Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
-    Route::get('/profile/update', 'ProfileController@update')->name('profile.update');
+    Route::post('/profile/update', 'ProfileController@update')->name('profile.update');
 });
 
 // Khusus Admin
 Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function () {
+<<<<<<< HEAD
     // Pariwisata
     Route::get('/pariwisata/dasboard','PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
     Route::get('/pariwisata/add','PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
@@ -127,9 +128,10 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
             'destroy' => 'admin.penanggulanganBencana.destroy',
             'update' => 'admin.penanggulanganBencana.update',
     ]);
+=======
+>>>>>>> cd0e12a742de4f3f39f41fa72e4804780eafc995
     // Dashboard admin
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
-    
 
     // Admin Manage
     Route::prefix('manage')->group(function () {
@@ -193,4 +195,20 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
     ]);
     Route::post('/penyakit/import', 'KasusPenyakitController@import')->name('admin.penyakit.import');
     Route::get('/penyakit/export', 'KasusPenyakitController@export')->name('admin.penyakit.export');
+
+    // Admin.Pariwisata
+    Route::get('/pariwisata/dasboard', 'PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
+    Route::get('/pariwisata/add', 'PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
+    Route::get('/pariwisata/export_excell', 'PariwisataController@export_excell')->name('admin.par_export_excell');
+    Route::post('/pariwisata/import_excell', 'PariwisataController@import_excell')->name('admin.par_import_excell');
+    Route::get('/pariwisata/cetak_pdf', 'PariwisataController@cetak_pdf')->name('admin.par_cetak_pdf');
+    Route::resource('/pariwisata', 'PariwisataController')->names([
+        'edit' => 'admin.pariwisata.edit',
+        'index' => 'admin.pariwisata.index',
+        'create' => 'admin.pariwisata.create',
+        'store' => 'admin.pariwisata.store',
+        'show' => 'admin.pariwisata.show',
+        'destroy' => 'admin.pariwisata.destroy',
+        'update' => 'admin.pariwisata.update',
+    ]);
 });

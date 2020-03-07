@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,7 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        $roles = Role::all();
+
+        return view('admin.users.index', [
+            'users' => $users,
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -34,7 +42,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 
     }
 
     /**
@@ -56,7 +64,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+
+        return view('admin.users.edit', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -68,7 +82,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->name = $request->nama;
+        $user->role_id = intval($request->role);
+
+        if ($user->save()) {
+            return redirect()->route('admin.manage.users.index')->with('info', [
+                'status' => 'success',
+                'pesan' => 'Berhasil mengubah data user!',
+            ]);
+        } else {
+            return redirect()->route('admin.manage.users.index')->with('info', [
+                'status' => 'warning',
+                'pesan' => 'Telah terjadi kesalahan saat mengubah data user!',
+            ]);
+        }
     }
 
     /**
@@ -79,6 +108,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if ($user->delete()) {
+            return redirect()->route('admin.manage.users.index')->with('info', [
+                'status' => 'success',
+                'pesan' => 'Berhasil menghapus data user!',
+            ]);
+        } else {
+            return redirect()->route('admin.manage.users.index')->with('info', [
+                'status' => 'warning',
+                'pesan' => 'Gagal nenghapus data user!',
+            ]);
+        }
     }
 }

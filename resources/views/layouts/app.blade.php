@@ -64,14 +64,14 @@
                             </a>
                         
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (Auth::user()->role === "1")
+                                @if (Auth::user()->role_id === 1)
                                     <a class="dropdown-item" href="{{ url('/admin') }}">
                                         <i class="fa-btn fas fa-columns"></i> Dashboard 
                                     </a>
                                 @endif
-                                <a class="dropdown-item" href="{{ url('/users/index') }}">
-                                    <i class="fa fa-btn fa-user"></i> Profile
-                                </a>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                    <i class="nav-icon fas fa-user"></i> Profile
+                                  </a>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="dropdown-item" href="{{ url('/logout') }}">

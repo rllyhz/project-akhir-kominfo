@@ -121,8 +121,9 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          {{-- <i class="fas fa-user-circle"></i> --}}
-          Halo, {{ Auth::user()->name }} <span class="caret"> <i class="nav-icon fas fa-angle-down ml-1"></i></span>
+          Halo, {{ Auth::user()->name }} <span class="caret">
+            <i class="fas fa-user-circle"></i>
+            <i class="nav-icon fas fa-angle-down ml-1"></i></span>
           {{-- <span class="badge badge-danger navbar-badge">3</span> --}}
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
