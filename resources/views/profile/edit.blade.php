@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-sm-10 mx-auto my-0">
                             <div class="mb-2 px-0">
-                                <i>Kamu hanya diperbolehkan mengganti field nama.</i>
+                                <i>Anda hanya diperbolehkan mengganti field nama.</i>
                             </div>
                             <hr>
 
