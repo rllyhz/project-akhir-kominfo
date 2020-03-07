@@ -33,7 +33,7 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Role :</strong></td>
-                                        <td>@if(Auth::user()->role == 1) Admin @else User @endif</td>
+                                        <td>@if(Auth::user()->role_id == 1) Admin @else User @endif</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Password :</strong></td>

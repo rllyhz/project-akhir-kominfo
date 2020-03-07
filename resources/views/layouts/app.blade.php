@@ -64,7 +64,7 @@
                             </a>
                         
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (Auth::user()->role === "1")
+                                @if (Auth::user()->role_id === 1)
                                     <a class="dropdown-item" href="{{ url('/admin') }}">
                                         <i class="fa-btn fas fa-columns"></i> Dashboard 
                                     </a>
