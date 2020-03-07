@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            return view('profile.index', ['user' => $user]);
+            $roles = Role::all();
+            return view('profile.index', ['user' => $user, 'roles' => $roles]);
         }
 
         return redirect()->back()->with('info', [
@@ -37,7 +39,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            return view('profile.edit', ['user' => $user]);
+            $roles = Role::all();
+            return view('profile.edit', ['user' => $user, 'role' => $roles]);
         }
 
         return redirect()->back()->with('info', [
