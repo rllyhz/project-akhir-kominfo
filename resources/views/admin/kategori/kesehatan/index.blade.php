@@ -46,7 +46,7 @@
             <div class="card">
                 <div class="card-body">
                     <center>
-                        <h5 class="title-card">Data Kasus Penyakit Menular</h5>
+                        <h5 class="title-card">Data Kasus Penyakit</h5>
                     </center>
                 </div>
             </div>

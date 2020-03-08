@@ -49,50 +49,44 @@
           <li class="nav-header">KELOLA DATA</li>
           <li class="nav-item">
               <a href="{{ route('admin.pendidikan') }}" class="nav-link">
-                <i class="nav-icon fas fa-school"></i>
+                <i class="nav-icon fas fa-graduation-cap"></i>
                   <p>Pendidikan</p>
               </a>
           </li>
           <li class="nav-item">
+            <a href="{{ route('admin.dasboard_kependudukan') }}" class="nav-link">
+              <i class="nav-icon fas fa-user-friends"></i>
+                <p>Kependudukan</p>
+            </a>
+        </li>
+          <li class="nav-item">
               <a href="{{ route('admin.kesehatan') }}" class="nav-link">
-                <i class="nav-icon fas fa-chart-bar"></i>
+                <i class="nav-icon fas fa-first-aid"></i>
                   <p>Kesehatan</p>
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ url('/admin/category/sosial') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
-                  <p>Sosial</p>
-              </a>
-          </li>
-          <li class="nav-item">
-              <a href="{{ route('admin.dasboard_pariwisata') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
-                  <p>Pariwisata</p>
-              </a>
-          </li>
-          <li class="nav-item">
               <a href="{{ route('admin.dasboard_lingkunganHidup') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
+                <i class="nav-icon fas fa-hand-holding-heart"></i>
                   <p>Lingkungan Hidup</p>
               </a>
           </li>
           <li class="nav-item">
               <a href="{{ route('admin.dasboard_pekerjaanUmum') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
+                <i class="nav-icon fas fa-user-tie"></i>
                   <p>Pekerjaan Umum</p>
               </a>
           </li>
           <li class="nav-item">
               <a href="{{ route('admin.dasboard_penanggulanganBencana') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
+                <i class="nav-icon fas fa-house-damage"></i>
                   <p>Penanggulangan Bencana</p>
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ route('admin.dasboard_kependudukan') }}" class="nav-link">
-                <i class="nav-icon fas fa-city"></i>
-                  <p>Kependudukan</p>
+              <a href="{{ route('admin.dasboard_pariwisata') }}" class="nav-link">
+                <i class="nav-icon fas fa-umbrella-beach"></i>
+                  <p>Pariwisata</p>
               </a>
           </li>
           <!-- /.nav-item -->

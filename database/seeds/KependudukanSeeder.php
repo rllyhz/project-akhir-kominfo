@@ -13,7 +13,7 @@ class KependudukanSeeder extends Seeder
     public function run()
     {
         //
-        
+
         $tahun = [2016, 2017, 2018, 2019];
         $kecamatan_id = [1, 2, 3, 5, 6, 7];
         $status = [
@@ -21,21 +21,21 @@ class KependudukanSeeder extends Seeder
             'Kematian',
             'Usia 0-11',
             'Usia 12-25',
-            'Usia  26-45',
+            'Usia 26-45',
             'Usia Lansia',
         ];
-        
+
         $data_kependudukan = [];
 
         for ($i = 0; $i < count($tahun); $i++) {
             for ($j = 0; $j < count($kecamatan_id); $j++) {
                 for ($k = 0; $k < count($status); $k++) {
-                        array_push($data_kependudukan, [
-                            'tahun' => $tahun[$i],
-                            'kecamatan_id' => $kecamatan_id[$j],
-                            'status' => $status[$k],
-                            'jumlah' => random_int(1, 30),
-                        ]);
+                    array_push($data_kependudukan, [
+                        'tahun' => $tahun[$i],
+                        'kecamatan_id' => $kecamatan_id[$j],
+                        'status' => $status[$k],
+                        'jumlah' => random_int(1, 30),
+                    ]);
                 }
             }
         }

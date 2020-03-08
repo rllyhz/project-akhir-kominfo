@@ -58,7 +58,7 @@
                 <div class="form-group">
                   <label for="tahun">Tahun</label>
                   <select class="form-control" id="tahun" onchange="filterData(this, 'tahun')">
-                    <option>--Belum Difilter--</option>
+                    <option value="0">--Belum Difilter--</option>
                   </select>
                 </div>
               </div>
@@ -66,7 +66,7 @@
                 <div class="form-group">
                   <label for="jenisSekolah">Jenis Sekolah</label>
                   <select class="form-control" id="jenisSekolah" onchange="filterData(this, 'jenisSekolah')" disabled>
-                    <option>--Belum Difilter--</option>
+                    <option value="0">--Belum Difilter--</option>
                     <option>Negeri</option>
                     <option>Swasta</option>
                   </select>
@@ -76,7 +76,7 @@
                 <div class="form-group">
                   <label for="jenjangPendidikan">Jenjang Pendidikan</label>
                   <select class="form-control" id="jenjangPendidikan" onchange="filterData(this, 'jenjangPendidikan')" disabled>
-                    <option>--Belum Difilter--</option>
+                    <option value="0">--Belum Difilter--</option>
                     <option>SD</option>
                     <option>SMP</option>
                     <option>SMA/SMK</option>
@@ -355,12 +355,6 @@ async function setChart() {
   await getDataAPI()
   tampilkanSemuaData()
 
-  tahun.forEach(tahun => {
-    const node = document.createElement("option");
-    node.text = tahun
-    document.getElementById("tahun").appendChild(node)
-  })
-
   document.getElementById("cardChart").classList.add('card')
   document.getElementById("formChart").classList.toggle("sr-only")
   document.getElementById("chart-title").innerText = "Data Sekolah Kota Semarang"
@@ -510,6 +504,16 @@ function tampilkanSemuaData() {
   isiDataChart(ylabels)
   setTampilan(ylabels.length)
   tampilkanChart(chartOptions)
+  
+  // set option tag untuk tahun
+  tahun.forEach(tahun => {
+    const node = document.createElement("option");
+    node.text = tahun
+    document.getElementById("tahun").appendChild(node)
+  })
+  
+  // reset juga select options tag
+  resetFilterOptions()
 }
 
 function filterData(el, filtering) {
@@ -539,10 +543,10 @@ function filterData(el, filtering) {
     }
   }
 
-  setChartDenganFilterisasi(aa)
+  setChartDenganFilterisasi()
 }
 
-function setChartDenganFilterisasi(aa) {
+function setChartDenganFilterisasi() {
   // tidak ada filter
   if (filteredKondisi === "000") {
     tampilkanSemuaData()
@@ -681,6 +685,38 @@ function setLabel() {
   }
   if (filteredKondisi[0] === "1" && filteredKondisi[1] === "1" && filteredKondisi[2] === "1") {
     chartOptions.data.datasets[0].label = `Data Sekolah Kota Semarang Perkabupaten - Kategori ${JenjangPendidikan} ${JenisSekolah} (Tahun ${Tahun})`
+  }
+}
+
+function resetFilterOptions() {
+  let selectTag = document.querySelector("#tahun")
+  let optionsTag = selectTag.options
+
+  for (var opt, j = 0; opt = optionsTag[j]; j++) {
+    if (opt.value == '0') {
+        selectTag.selectedIndex = j;
+        break;
+    }
+  }
+
+  selectTag = document.querySelector("#jenisSekolah")
+  optionsTag = selectTag.options
+
+  for (var opt, j = 0; opt = optionsTag[j]; j++) {
+    if (opt.value == '0') {
+        selectTag.selectedIndex = j;
+        break;
+    }
+  }
+
+  selectTag = document.querySelector("#jenjangPendidikan")
+  optionsTag = selectTag.options
+  
+  for (var opt, j = 0; opt = optionsTag[j]; j++) {
+    if (opt.value == '0') {
+        selectTag.selectedIndex = j;
+        break;
+    }
   }
 }
 

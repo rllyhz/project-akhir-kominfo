@@ -112,7 +112,7 @@
                     @foreach ($penyakit as $item)
                         <tr role="row">
                             <td class="sorting_1">{{ $item['tahun'] }}</td>
-                            <td class="">{{ $item->penyakit }}</td>
+                            <td class="">{{ $item['nama_penyakit'] }}</td>
                             <td class="">{{ $item['jumlah'] }}</td>
                             <td>
                               <a href="{{ route('admin.penyakit.edit', $item['id']) }}" class="badge badge-success">Edit</a>                              
@@ -208,94 +208,19 @@
 
 @section('scripts')
 <script>  
+var myChart,
+    canvas = document.getElementById('myChart'),
+    ctx = canvas.getContext('2d'),
+    labelChart = 'Data Kasus Penyakit Kota Semarang',
+    datasets = [],
+    labels = [],
+    xlabels = []
 
-const xlabels = [],
-      dataChart = [],
-      ctx = $('#myChart')
-
-ctx.css({
-  minWidth: "70vw",
-  minHeight: "30vh",
-})
-
-// global varables
-let dataPenyakit = undefined,
-    dataPerTahun = undefined,
-    totalPenyakit = undefined,
-    namaPenyakit = undefined,
-    tahun = [],
-    dataset = []
-
-
-showChart('line')
-
-async function showChart(tipeChart) {
-  await getData()
-  await setLabels()
-  await setDataChart(xlabels, tipeChart)
-  setChart(tipeChart)
-  document.getElementById("chart-title").innerText = "Data Kasus Penyakit Menular Kota Semarang"
-}
-
-async function getData() {
-  const response = await fetch('/penyakit/getDataChart')
-  const data = await response.json()
-  penyakit = data.penyakit
-  dataPerTahun = Object.entries(data.dataPerTahun)
-  totalpenyakit = data.total_penyakit
-  namaPenyakit = data.nama_penyakit
-}
-
-function setLabels() {
-  namaPenyakit.forEach(penyakit => {
-    xlabels.push(penyakit)
-  })
-}
-
-async function setDataChart(xlabels, tipeChart) {
-  let Rwarna = 50, Gwarna = 0, Bwarna = 90;
-
-  dataPerTahun.forEach(data => {
-    let datasetSementara = [],
-        bgColor = [],
-        borderColor = [];
-
-    data[1].forEach(data => {
-      datasetSementara.push(data.jumlah)
-    })
-
-    // set bgColor dan borderColor
-    Rwarna += Math.round((Math.random() * (250 - 10) + 10))
-    Gwarna += Math.round((Math.random() * (100 - 10) + 10))
-
-    bgColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, .3)`)
-    borderColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, 1)`)
-
-    // set dataset
-    dataset.push({
-      label: data[0],
-      data: datasetSementara,
-      type: tipeChart,
-      backgroundColor: bgColor,
-      borderColor: borderColor,
-      borderWidth: 1
-    })
-
-    if (Rwarna >= 250) {
-      Rwarna = 10
-    } else if (Gwarna >= 250) {
-      Gwarna = 5
-    } 
-
-  })
-}
-
-function setChart(tipeChart) {
-  const myChart = new Chart(ctx, {
-    type: tipeChart,
+const chartOptions = {
+    type: 'line',
     data: {
-        labels: xlabels,
-        datasets: dataset,
+        labels: [],
+        datasets: datasets,
       },
       options: {
           scales: {
@@ -305,23 +230,158 @@ function setChart(tipeChart) {
                   }
               }]
           },
-          tooltips: {
-            titleFontSize: 14,
-            enabled: true,
-            mode: 'single',
-            // callbacks: {
-            //   label: function(tooltipItems, data) {
-            //     return tooltipItems.yLabel + ' : ' + tooltipItems.xLabel + " Files";
-            //   }
-            // }
-          },
           legend: {
             labels: {
               // fontColor: 'black',
             }
           }
       }
+  };
+
+// persiapan data yang dibutuhkan
+var data,
+    dataPerTahun = [],
+    dataPerPenyakit = [],
+    data_kasusPenyakit,
+    tahun = []
+
+// tampilkan default chart
+setChart()
+
+async function setChart() {
+  await getDataAPI()
+  isiDataset(null, 'line')
+  isiLabels(labels)
+  myChart = new Chart(ctx, chartOptions)
+}
+
+async function getDataAPI() {
+  const response = await fetch('/penyakit/getDataChart')
+  data = await response.json()
+  data_kasusPenyakit = data
+
+  console.log(data_kasusPenyakit)
+
+  getTahun(data_kasusPenyakit)
+  getDataPertahun(data_kasusPenyakit, tahun)
+  getLabels(data_kasusPenyakit)
+  dataPerPenyakit = ubahDataKeDataChart(dataPerTahun, true)
+}
+
+function getTahun(data) {
+  tahun = data.map(data => data.tahun)
+                  .filter((value, index, self) => self.indexOf(value) === index)
+                  .sort()
+}
+
+function getLabels(data) {
+  labels = []
+  labels = data.map(data => data.nama_penyakit)
+                  .filter((value, index, self) => self.indexOf(value) === index)
+                  .sort()
+}
+
+function getDataPertahun(data, listTahun) {
+  listTahun.forEach(tahun => {
+    dataPerTahun.push(
+      data.filter(data => data.tahun == tahun)
+    )
   })
+}
+
+async function isiDataset(data, tipeChart) {
+  let Rwarna = 50, Gwarna = 0, Bwarna = 90;
+  let index = 0
+  let dataChart = undefined
+
+  // cek data kosong?
+  if (typeof data != "undefined" && data != null && data.length != null && data.length > 0) {
+    dataChart = data
+  } else {
+    dataChart = dataPerTahun
+  }
+
+  dataChart.forEach(data => {
+    let datasetSementara = [],
+        bgColor = [],
+        borderColor = [];
+
+    data.forEach(data => {
+      datasetSementara.push(data.jumlah)
+    })
+
+    // set bgColor dan borderColor
+    Rwarna += Math.round((Math.random() * (250 - 10) + 10))
+    Gwarna += Math.round((Math.random() * (100 - 10) + 10))
+
+    bgColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, 0)`)
+    borderColor.push(`rgba(${Rwarna}, ${Gwarna}, ${Bwarna}, 1)`)
+
+    // // set dataset
+    datasets.push({
+      label: tahun[index],
+      data: datasetSementara,
+      type: tipeChart,
+      backgroundColor: bgColor,
+      borderColor: borderColor,
+      borderWidth: 2
+    })
+
+    if (Rwarna >= 250) {
+      Rwarna = 10
+    } else if (Gwarna >= 250) {
+      Gwarna = 5
+    }
+
+    index++
+  })
+
+  chartOptions.data.datasets = datasets
+}
+
+function isiLabels(labels = []) {
+  if (!Array.isArray(labels)) {
+    console.error("Data label yang dikirimkan harus berbentuk array!")
+  } else {
+    chartOptions.data.labels = labels
+  }
+}
+
+function hapusDataset() {
+  datasets = []
+}
+
+function ubahDataKeDataChart(listData, opsi) {
+  const data = []
+  const nama_penyakit = []
+  const dataPerPenyakit = []
+  
+  if (opsi) {
+    listData.forEach(list => list.forEach(list => {
+      data.push(list)
+    }))
+  } else {
+    listData.forEach(list =>{
+      data.push(list)
+    })
+  }
+
+
+  data.forEach(data_kasusPenyakit => {
+    if (nama_penyakit.includes(data_kasusPenyakit.nama_penyakit)) {
+      let tempatSementara = dataPerPenyakit.filter(data => data.nama_penyakit == data_kasusPenyakit.nama_penyakit)[0]
+      let index = dataPerPenyakit.indexOf(tempatSementara)
+      dataPerPenyakit[index].jumlah += parseInt(data_kasusPenyakit.jumlah)
+    } else {
+      dataPerPenyakit.push({
+        nama_penyakit: data_kasusPenyakit.nama_penyakit,
+        jumlah: parseInt(data_kasusPenyakit.jumlah)
+      });
+      nama_penyakit.push(data_kasusPenyakit.nama_penyakit)
+    }
+  })
+
+  return dataPerPenyakit;
 }
 
 </script>

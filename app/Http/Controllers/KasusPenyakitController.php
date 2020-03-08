@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\PenyakitImport;
 use App\KasusPenyakit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -17,9 +18,12 @@ class KasusPenyakitController extends Controller
      */
     public function index()
     {
-        $penyakit = KasusPenyakit::with('penyakit')->get();
+        $penyakit = DB::table('kasus_penyakit')
+            ->join('jenis_penyakit', 'kasus_penyakit.jenis_penyakit_id', '=', 'jenis_penyakit.id')
+            ->select('kasus_penyakit.*', 'jenis_penyakit.nama_penyakit')
+            ->get();
 
-        foreach ($penyakit as $p);
+        $result = json_decode($penyakit, true);
 
         $total_penyakit = 0;
         foreach ($penyakit as $item) {
@@ -27,7 +31,7 @@ class KasusPenyakitController extends Controller
         }
 
         return view('admin.penyakit.index', [
-            'penyakit' => $penyakit,
+            'penyakit' => $result,
             'total_penyakit' => $total_penyakit,
         ]);
     }
@@ -204,87 +208,16 @@ class KasusPenyakitController extends Controller
 
     public function export()
     {
+        // 
     }
 
     public function getDataChart()
     {
-        $penyakit = KasusPenyakit::with('penyakit')->get();
+        $penyakit = DB::table('kasus_penyakit')
+            ->join('jenis_penyakit', 'kasus_penyakit.jenis_penyakit_id', '=', 'jenis_penyakit.id')
+            ->select('kasus_penyakit.*', 'jenis_penyakit.nama_penyakit')
+            ->get();
 
-        dd($penyakit);
-
-        $penyakitFix = [];
-
-        for ($i = 0; $i < $penyakit->count(); $i++) {
-            $penyakitFix[$i] = [
-                "id" => $penyakit[$i]->id,
-                "kecamatan" => $penyakit[$i]->kecamatan->nama_kecamatan,
-                "tahun" => $penyakit[$i]->tahun,
-                "jenis_penyakit" => $penyakit[$i]->jenis_penyakit,
-                "jumlah" => $penyakit[$i]->jumlah,
-            ];
-        }
-
-        dd($penyakitFix);
-
-        $total_penyakit = 0;
-        foreach ($penyakit as $item) {
-            $total_penyakit += intval($item->jumlah);
-        }
-
-        $GLOBALS['tahun'] = [];
-        $GLOBALS['jenis_penyakit'] = [];
-        $GLOBALS['tahunSebelumnya'] = null;
-        $GLOBALS['penyakitSebelumnya'] = null;
-
-        $penyakitFix->map(function ($penyakitFix) {
-            if (intval($penyakitFix->tahun) !== intval($GLOBALS['tahunSebelumnya'])) {
-                // echo 'ga sama <br>';
-                if (!in_array($penyakitFix->tahun, $GLOBALS['tahun'])) {
-                    array_push($GLOBALS['tahun'], $penyakitFix->tahun);
-                }
-                $GLOBALS['tahunSebelumnya'] = $penyakitFix->tahun;
-            } else {
-                // echo 'sama nih <br>';
-                $GLOBALS['tahunSebelumnya'] = $penyakitFix->tahun;
-            }
-        });
-
-        $penyakitFix->map(function ($kasus) {
-            if ($kasus->jenis_penyakit !== $GLOBALS['penyakitSebelumnya']) {
-                // echo 'ga sama <br>';
-                if (!in_array($kasus->jenis_penyakit, $GLOBALS['jenis_penyakit'])) {
-                    array_push($GLOBALS['jenis_penyakit'], $kasus->jenis_penyakit);
-                }
-                $GLOBALS['penyakitSebelumnya'] = $kasus->jenis_penyakit;
-            } else {
-                // echo 'sama nih <br>';
-                $GLOBALS['penyakitSebelumnya'] = $kasus->jenis_penyakit;
-            }
-        });
-
-        $tahun = $GLOBALS['tahun'];
-        $nama_penyakit = $GLOBALS['jenis_penyakit'];
-
-        foreach ($tahun as $th) {
-            $dataPerTahun[$th] = [];
-        }
-
-        foreach ($tahun as $th) {
-            foreach ($penyakitFix as $p) {
-                if ($p->tahun == $th) {
-                    array_push($dataPerTahun[$th], $p);
-                }
-            }
-        }
-
-        $data = [
-            'penyakit' => $penyakitFix,
-            'tahun' => $tahun,
-            'nama_penyakit' => $nama_penyakit,
-            'dataPerTahun' => $dataPerTahun,
-            'total_penyakit' => $total_penyakit,
-        ];
-
-        echo json_encode($data);
+        echo json_encode($penyakit);
     }
 }
