@@ -32,13 +32,12 @@ class PenanggulanganBencanaSeeder extends Seeder
         for ($i = 0; $i < count($tahun); $i++) {
             for ($j = 0; $j < count($penyebab); $j++) {
                 for ($k = 0; $k < count($tempat_kebakaran); $k++) {
-                        array_push($data_penanggulanganBencana, [
-                            'tahun' => $tahun[$i],
-                            'penyebab' => $penyebab[$j],
-                            'tempat_kebakaran' => $tempat_kebakaran[$k],
-                            'jumlah' => random_int(1, 20),
-                        ]);
-                    
+                    array_push($data_penanggulanganBencana, [
+                        'tahun' => $tahun[$i],
+                        'penyebab' => $penyebab[$j],
+                        'tempat_kebakaran' => $tempat_kebakaran[$k],
+                        'jumlah' => random_int(1, 20),
+                    ]);
                 }
             }
         }

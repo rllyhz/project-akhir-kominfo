@@ -14,24 +14,22 @@ class PekerjaanUmumSeeder extends Seeder
     {
         //
 
-                    
+
         $tahun = [2015, 2016, 2017, 2018];
         $sumber_dana = [
             'APBN',
             'APBD',
             'Luar Negeri',
             'Sumber dana Lainya',
-        
-            
         ];
-        $data_pekerjaanUmum= [];
+        $data_pekerjaanUmum = [];
 
         for ($i = 0; $i < count($tahun); $i++) {
             for ($j = 0; $j < count($sumber_dana); $j++) {
                 array_push($data_pekerjaanUmum, [
                     'tahun' => $tahun[$i],
                     'sumber_dana' => $sumber_dana[$j],
-                    'jumlah_dana' => random_int(50, 100)."0000000",
+                    'jumlah_dana' => random_int(50, 100) . "0000000",
                 ]);
             }
         }
