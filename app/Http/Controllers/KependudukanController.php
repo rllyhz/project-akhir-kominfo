@@ -23,10 +23,7 @@ class KependudukanController extends Controller
      */
     public function index(Request $request)
     {
-        // $data = DB::table('kependudukans')
-        // ->join('kecamatan','kependudukans.kecamatan_id','=','kecamatan.id')
-        // ->orderBy('kependudukans.kecamatan_id','desc')->get();
-        // dd($data);         
+              
         if($request->ajax()){
             $data = DB::table('kecamatan')
             ->join('kependudukans','kecamatan.id','=','kependudukans.kecamatan_id')
@@ -34,7 +31,7 @@ class KependudukanController extends Controller
             return DataTables::of($data)
                     
                     ->addColumn('action',function($row){
-                        $btn ='<a href="/admin/kependudukan/'.$row->id.'/edit" class="edit btn btn-success btn-sm">Edit</a>';
+                        $btn ='<a href="kependudukan/'.$row->id.'/edit" class="edit btn btn-success btn-sm">Edit</a>';
                         $btn  .='<form action="kependudukan/'.$row->id.'" method="post" style="display:inline;">
                         <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="'.csrf_token().'">
@@ -194,7 +191,6 @@ class KependudukanController extends Controller
         $kependudukans = DB::table('kecamatan')
         ->join('kependudukans','kecamatan.id','=','kependudukans.kecamatan_id')
         ->get();
-        dd($kependudukans);
         return json_encode($kependudukans);
     }
 }

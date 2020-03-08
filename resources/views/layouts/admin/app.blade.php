@@ -13,7 +13,7 @@
   <meta name="csrf_token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Data Center Semarang') }} | @yield('title', 'Dashboard')</title>
-  <!-- <script src="{{ asset('js/app.js') }}" ></script> -->
+  <link rel="stylesheet" href="{{asset('css/app.css')}}">
   <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
   <script src="{{asset('/vendor/datatables/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
@@ -83,7 +83,6 @@
 <!-- MODAL SECTION ends -->
 
 <!-- REQUIRED SCRIPTS -->
-
 <!-- jQuery -->
 <!-- <script src="{{ asset('plugins/jquery/jquery.min.js')}}"></script> -->
 <!-- Bootstrap -->

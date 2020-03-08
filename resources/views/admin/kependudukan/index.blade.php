@@ -13,8 +13,7 @@
                         <div class="col-md">
                             <a href="{{route('admin.kep_export_excell')}}" class="btn btn-xs btn-success"> <i class="fa fa-download"></i> Export</a>
                             <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#importExcel"> <i class="fa fa-file"></i> Import</button>
-                            <!-- cetak pdf -->
-                            <button  class="btn btn-xs btn-info" data-toggle="modal" data-target="#cetakPdf" > <i class="fa fa-print"></i> Print</button>
+                            
                             		<!-- Import Excel -->
                             <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">

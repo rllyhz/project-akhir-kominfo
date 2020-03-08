@@ -45,7 +45,6 @@ Route::middleware('auth', 'web')->group(function () {
 
 // Khusus Admin
 Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function () {
-<<<<<<< HEAD
     // Pariwisata
     Route::get('/pariwisata/dasboard','PariwisataController@dasboard_pariwisata')->name('admin.dasboard_pariwisata');
     Route::get('/pariwisata/add','PariwisataController@cd_pariwisata')->name('admin.par_pariwisata_add');
@@ -128,8 +127,6 @@ Route::prefix('/admin')->middleware('auth', 'isAdmin', 'web')->group(function ()
             'destroy' => 'admin.penanggulanganBencana.destroy',
             'update' => 'admin.penanggulanganBencana.update',
     ]);
-=======
->>>>>>> cd0e12a742de4f3f39f41fa72e4804780eafc995
     // Dashboard admin
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
 

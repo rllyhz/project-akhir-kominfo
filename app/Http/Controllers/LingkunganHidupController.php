@@ -182,8 +182,7 @@ class LingkunganHidupController extends Controller
 
     // return  data
     public function getDataChart(){
-        $lingkunganHidup = LingkuganHidup::all();
-        dd($lingkunganHidup);
+        $lingkunganHidup = LingkunganHidup::all();
         return json_encode($lingkunganHidup);
     }
 
