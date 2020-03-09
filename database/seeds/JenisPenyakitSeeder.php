@@ -18,12 +18,24 @@ class JenisPenyakitSeeder extends Seeder
                 'deskripsi_penyakit' => "Penyakit yang disebabkan oleh virus",
             ],
             [
-                'nama_penyakit' => "TBC",
+                'nama_penyakit' => "Radang Tenggorokan",
+                'deskripsi_penyakit' => "Penyakit yang disebabkan oleh virus",
+            ],
+            [
+                'nama_penyakit' => "TBC/Tuberculosis",
                 'deskripsi_penyakit' => "Penyakit yang disebabkan oleh virus juga",
             ],
             [
-                'nama_penyakit' => "Kusta",
-                'deskripsi_penyakit' => "Penyakit Kusta",
+                'nama_penyakit' => "Malaria",
+                'deskripsi_penyakit' => "Penyakit dari gigitan nyamuk",
+            ],
+            [
+                'nama_penyakit' => "Kholera/Cholera",
+                'deskripsi_penyakit' => "Penyakit Kolera",
+            ],
+            [
+                'nama_penyakit' => "DBD/Demam Berdarah",
+                'deskripsi_penyakit' => "Penyakit Kolera",
             ],
         ];
 

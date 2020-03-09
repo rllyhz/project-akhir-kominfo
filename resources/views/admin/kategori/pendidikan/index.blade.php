@@ -1,85 +1,66 @@
 @extends('layouts.admin.app')
-
-@section('title', 'Data Pendidikan')
-
-@section('page-header')
-<div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Halaman Pendidikan</h1>
-      </div><!-- /.col -->
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Admin</a></li>
-          <li class="breadcrumb-item active">Pendidikan</li>
-        </ol>
-      </div><!-- /.col -->
-    </div><!-- /.row -->
-  </div><!-- /.container-fluid -->
-@endsection
+@section('title','Data Pendidikan')
 
 @section('content')
-<div class="row mt-3">
-  <div class="col-sm">
-    @if (session('info'))
-      <div class="alert alert-{{ session('info')['status'] }} alert-dismissible fade show" role="alert">
-        {!! session('info')['pesan'] !!}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
-  </div>
-</div>
+        <div class="container ml-5">
 
-<div class="row mt-5 mb-3">
-  <div class="col-sm">
-    <center>
-      <h3>Data Pendidikan</h3>
-    </center>
-  </div>
-</div>
+            <div class="row">
+                <div class="col-md-11">
+                    <h1>Data Pendidikan</h1>
+                    <div class="row mt-5">
 
-<div class="row">
-    <div class="col-sm">
-        <a href="{{ route('admin.sekolah.index') }}">
-            <div class="card">
-                <div class="card-body">
-                    <center>
-                        <h5 class="title-card">Data Sekolah</h5>
-                    </center>
+            <!-- data siswa putus sekolah -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <a href="{{route('admin.sekolah.index')}}" >
+                    <div class="card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Data Sekolah</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                          </div>
+                          <div class="col-auto">
+                            <i class="fas fa-school fa-2x text-gray-300"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- data lain-->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <a href="">
+                <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Data Lain</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fa fa-folder fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </a>
+            </div>
+
+           
+                  
+                        
+                </div>
                 </div>
             </div>
-        </a>
-    </div>
-    <div class="col-sm">
-        <a href="">
-            <div class="card">
-                <div class="card-body">
-                    <center>
-                        <h5 class="title-card">Data Lain</h5>
-                    </center>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-sm">
-        <a href="">
-            <div class="card">
-                <div class="card-body">
-                    <center>
-                        <h5 class="title-card">Data Lain</h5>
-                    </center>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
+        </div>
+
+
+
+       
 @endsection
-
-@section('modal-section')
-@endsection
-
-
 @section('scripts')
+
+
 @endsection

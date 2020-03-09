@@ -58,7 +58,7 @@
                 <div class="form-group">
                   <label for="tahun">Tahun</label>
                   <select class="form-control" id="tahun" onchange="filterData(this, 'tahun')">
-                    <option value="0">--Belum Difilter--</option>
+                    
                   </select>
                 </div>
               </div>
@@ -479,6 +479,12 @@ function tampilkanSemuaData() {
   hapusIsiChart()
   hapusXLabels()
   hapusWarnaTampilan()
+  // reset select tag tahun
+  document.getElementById("tahun").innerHTML = ""
+  const optionTag = (document.createElement("option"))
+  optionTag.setAttribute("value", "0")
+  optionTag.innerText = "--Belum Difilter--"
+  document.getElementById("tahun").appendChild(optionTag)
 
   chartOptions.data.datasets[0].label = 'Data Sekolah Kota Semarang Perkabupaten'
 

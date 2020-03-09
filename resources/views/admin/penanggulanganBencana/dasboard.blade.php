@@ -1,13 +1,13 @@
 @extends('layouts.admin.app')
-@section('title','Data Penanggulangan Bencana')
+@section('title','Data Pendidikan')
 
 @section('content')
         <div class="container ml-5">
 
             <div class="row">
                 <div class="col-md-11">
-                    <h1>Data Penanggulangan Bencana</h1>
-                    <div class="row">
+                    <h1>Data Pendidikan</h1>
+                    <div class="row mt-5">
 
             <!-- data siswa putus sekolah -->
             <div class="col-xl-3 col-md-6 mb-4">

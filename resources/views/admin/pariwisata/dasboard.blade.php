@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md">
                     <h1>Data Pariwisata</h1>
-                    <div class="row">
+                    <div class="row mt-5">
                     <!-- data siswa putus sekolah -->
                     <div class="col-xl-3 col-md-6 mb-4">
 
